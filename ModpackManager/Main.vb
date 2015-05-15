@@ -9,6 +9,11 @@ Public Class Main
     Private Sub btnDownload_Click(sender As Object, e As EventArgs) Handles btnDownload.Click
         'My.Computer.Network.DownloadFile("http://download855.mediafire.com/inkmckd604qg/mdx989uyqe0jkeu/EquivalentExchange3-1.7.10-0.3.501.jar", "C:\Test\Mods\EquivalentExchange-1.7.10-0.3.501.jar")
 
+        ListBox1.Items.Clear()
+        ListBox2.Items.Clear()
+        ListBox3.Items.Clear()
+        ListBox4.Items.Clear()
+
         Dim ds As DataTable = GetTable() 'Datatable with all information from the database
         Dim files As New List(Of String) 'List containing all the files in the mods folder (excluding mods inside of subfolders e.g. the 1.7.10 folder)
         Dim dbfiles As New List(Of String) 'List containing all the mods from the database with only their rawname and version stuck together (e.g. "buildcraft" and "1.1.0" --> "buildcraft-1.1.0.jar")
@@ -17,7 +22,7 @@ Public Class Main
             dbfiles.Add(ds.Rows(i)(4) & "-" & ds.Rows(i)(3) & ".jar")
         Next
 
-        Dim path As String = "C:\Users\Public\Documents\MultiMC\instances\Itvara Server\minecraft\mods" 'Path to the MultiMC mods folder (should be asked on first startup and stored in registry)
+        Dim path As String = "C:\Test\All Mods" 'Path to the MultiMC mods folder (should be asked on first startup and stored in registry)
         Dim dir As New DirectoryInfo(path) 'The actual directory in variable format
 
         For Each fle In dir.GetFiles("*.jar") 'Getting all the files from the specified mods folder and adding them to their respective list (files)
@@ -26,26 +31,33 @@ Public Class Main
 
         MsgBox(files.Count & " | " & dbfiles.Count) 'Quick count comparison (debug)
 
-        Dim found As Boolean
-
         For Each item In files
-            Dim i As Integer = 0
+            'Dim found As Boolean
 
-            For i = 0 To dbfiles.Count - 1
-                If item.ToString = dbfiles(i).ToString Then
-                    Exit For
-                Else
-                    found = False
+            For i = 0 To dbfiles.Count - 1 'Go through every mod found in the database and see if any of the mods match, then compare their version
+                If item.Contains(ds.Rows(i)(4)) Then 'Column 4 in the db is the raw name of the mod
+                    ListBox1.Items.Add(item)
+                    ListBox3.Items.Add(ds.Rows(i)(4) & "-" & ds.Rows(i)(3) & ".jar")
+
+                    Dim modSplit() As String = Split(item, "-", 2)
+                    Dim modVersion As String = ""
+
+                    If modSplit.Count > 2 Then
+                        For j = 1 To modSplit.Count - 1
+                            modVersion &= modSplit(j)
+                        Next
+                    Else
+                        modVersion = modSplit(1)
+                    End If
+
+                    If modVersion <> ds.Rows(i)(3) & ".jar" Then 'Compare the version
+                        ListBox4.Items.Add(item) 'Add them here if the version don't match
+                    Else
+                        ListBox2.Items.Add(item) 'Add them here if the versions match
+                    End If
                 End If
             Next
-
-            If Not found Then
-                MsgBox("Error: Mismatch! " & item.ToString & "|" & dbfiles(i).ToString)
-            End If
         Next
-
-        ListBox1.DataSource = files
-        ListBox2.DataSource = dbfiles
     End Sub
 
     Private Function GetTable() As DataTable

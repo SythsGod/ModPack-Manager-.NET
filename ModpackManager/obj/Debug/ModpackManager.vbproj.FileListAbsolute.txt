@@ -8,3 +8,13 @@ C:\Users\Sachimi\Documents\Visual Studio 2013\Projects\ModpackManager\ModpackMan
 C:\Users\Sachimi\Documents\Visual Studio 2013\Projects\ModpackManager\ModpackManager\obj\Debug\ModpackManager.exe
 C:\Users\Sachimi\Documents\Visual Studio 2013\Projects\ModpackManager\ModpackManager\obj\Debug\ModpackManager.xml
 C:\Users\Sachimi\Documents\Visual Studio 2013\Projects\ModpackManager\ModpackManager\obj\Debug\ModpackManager.pdb
+G:\Git\ModPack-Manager-.NET\ModpackManager\bin\Debug\ModpackManager.exe.config
+G:\Git\ModPack-Manager-.NET\ModpackManager\obj\Debug\ModpackManager.exe
+G:\Git\ModPack-Manager-.NET\ModpackManager\obj\Debug\ModpackManager.xml
+G:\Git\ModPack-Manager-.NET\ModpackManager\obj\Debug\ModpackManager.pdb
+G:\Git\ModPack-Manager-.NET\ModpackManager\bin\Debug\ModpackManager.exe
+G:\Git\ModPack-Manager-.NET\ModpackManager\bin\Debug\ModpackManager.pdb
+G:\Git\ModPack-Manager-.NET\ModpackManager\bin\Debug\ModpackManager.xml
+G:\Git\ModPack-Manager-.NET\ModpackManager\obj\Debug\ModpackManager.Main.resources
+G:\Git\ModPack-Manager-.NET\ModpackManager\obj\Debug\ModpackManager.Resources.resources
+G:\Git\ModPack-Manager-.NET\ModpackManager\obj\Debug\ModpackManager.vbproj.GenerateResource.Cache
