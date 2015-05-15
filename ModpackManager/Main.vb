@@ -31,30 +31,33 @@ Public Class Main
 
         MsgBox(files.Count & " | " & dbfiles.Count) 'Quick count comparison (debug)
 
+        For k = 0 To ds.Rows.Count - 1
+            ListBox3.Items.Add(ds.Rows(k)(4) & "-" & ds.Rows(k)(3) & ".jar")
+        Next
+
         For Each item In files
-            'Dim found As Boolean
+            For j = 0 To dbfiles.Count - 1 'Go through every mod found in the database and see if any of the mods match, then compare their version
+                Dim raw As String = ds.Rows(j)(4)
 
-            For i = 0 To dbfiles.Count - 1 'Go through every mod found in the database and see if any of the mods match, then compare their version
-                If item.Contains(ds.Rows(i)(4)) Then 'Column 4 in the db is the raw name of the mod
+                'Hacky way to deal with items that also contains other items yet are not the same (hweh)
+                If raw = "buildcraft" And item.Contains("buildcraftcompat") Or raw = "magicalcrops" And item.Contains("mfrmagicalcropscompat") Then
+                    Exit For
+                End If
+
+                If item.Contains(raw) Then 'Column 4 in the db is the raw name of the mod
+                    'MsgBox("Current mod: " & item)
+
                     ListBox1.Items.Add(item)
-                    ListBox3.Items.Add(ds.Rows(i)(4) & "-" & ds.Rows(i)(3) & ".jar")
 
-                    Dim modSplit() As String = Split(item, "-", 2)
-                    Dim modVersion As String = ""
+                    Dim modVersion As String = Split(item, "-", 2)(1)
 
-                    If modSplit.Count > 2 Then
-                        For j = 1 To modSplit.Count - 1
-                            modVersion &= modSplit(j)
-                        Next
+                    If modVersion <> ds.Rows(j)(3) & ".jar" Then 'Compare the version
+                        'Code if the version doesn't match
                     Else
-                        modVersion = modSplit(1)
+                        'Code if the version matches
                     End If
 
-                    If modVersion <> ds.Rows(i)(3) & ".jar" Then 'Compare the version
-                        ListBox4.Items.Add(item) 'Add them here if the version don't match
-                    Else
-                        ListBox2.Items.Add(item) 'Add them here if the versions match
-                    End If
+                    Exit For
                 End If
             Next
         Next
@@ -66,7 +69,7 @@ Public Class Main
         Dim ds As New DataSet
         Dim adp As MySqlDataAdapter
 
-        sqlStr = "select * from Mods_List ORDER BY modname"
+        sqlStr = "select * from Mods_List WHERE active = '1' ORDER BY modname"
         myConn.ConnectionString = "server=" & My.Resources.Ip & ";User id=" & My.Resources.User & ";password=" & My.Resources.Pass & ";database=" & My.Resources.Db
 
         Try
