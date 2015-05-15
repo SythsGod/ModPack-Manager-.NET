@@ -4,19 +4,36 @@ Public Class Main
     Public Sub New()
         InitializeComponent()
         Me.StartPosition = FormStartPosition.CenterScreen
+        CheckForPath()
+    End Sub
+
+    Private Sub CheckForPath()
+        If GetSetting(My.Application.Info.ProductName, "General", "Path") = Nothing Then
+            Dim pathExists As Boolean = Directory.Exists("C:\Users\Public\Documents\MultiMC\instances")
+            If pathExists Then
+
+            End If
+
+            Dim msg As String = "There was no saved path found yet, please select the path to the following folder: /MultiMC/<instance name>/minecraft/mods"
+            Dim dialogWindow As New FolderBrowserDialog()
+            dialogWindow.ShowDialog()
+            Dim path As String
+            path = dialogWindow.SelectedPath
+            If MsgBox("Is this path correct?" & vbNewLine & path, MsgBoxStyle.OkCancel) = MsgBoxResult.Ok Then
+                SaveSetting(My.Application.Info.ProductName, "General", "Path", path)
+            Else
+                CheckForPath()
+            End If
+        End If
     End Sub
 
     Private Sub btnDownload_Click(sender As Object, e As EventArgs) Handles btnDownload.Click
         'My.Computer.Network.DownloadFile("http://download855.mediafire.com/inkmckd604qg/mdx989uyqe0jkeu/EquivalentExchange3-1.7.10-0.3.501.jar", "C:\Test\Mods\EquivalentExchange-1.7.10-0.3.501.jar")
 
-        ListBox1.Items.Clear()
-        ListBox2.Items.Clear()
-        ListBox3.Items.Clear()
-        ListBox4.Items.Clear()
-
         Dim ds As DataTable = GetTable() 'Datatable with all information from the database
         Dim files As New List(Of String) 'List containing all the files in the mods folder (excluding mods inside of subfolders e.g. the 1.7.10 folder)
         Dim dbfiles As New List(Of String) 'List containing all the mods from the database with only their rawname and version stuck together (e.g. "buildcraft" and "1.1.0" --> "buildcraft-1.1.0.jar")
+        Dim modsNotFound As New List(Of String) 'List of mods that weren't found on the local machine
 
         For i = 0 To ds.Rows.Count - 1 'Add all the mods to the dbfiles (as mentioned above)
             dbfiles.Add(ds.Rows(i)(4) & "-" & ds.Rows(i)(3) & ".jar")
@@ -29,26 +46,35 @@ Public Class Main
             files.Add(fle.Name)
         Next
 
-        MsgBox(files.Count & " | " & dbfiles.Count) 'Quick count comparison (debug)
+        'Check if all mods were found
+        For i = 0 To ds.Rows.Count - 1
+            Dim found As Boolean = False
+            Dim item As String = ds.Rows(i)(4)
 
-        For k = 0 To ds.Rows.Count - 1
-            ListBox3.Items.Add(ds.Rows(k)(4) & "-" & ds.Rows(k)(3) & ".jar")
+            For j = 0 To files.Count - 1
+                If files(j).Contains(item) Then
+                    found = True
+                    Exit For
+                End If
+            Next
+
+            If Not found Then
+                'Download the new mod
+            End If
         Next
 
         For Each item In files
+
             For j = 0 To dbfiles.Count - 1 'Go through every mod found in the database and see if any of the mods match, then compare their version
                 Dim raw As String = ds.Rows(j)(4)
 
                 'Hacky way to deal with items that also contains other items yet are not the same (hweh)
-                If raw = "buildcraft" And item.Contains("buildcraftcompat") Or raw = "magicalcrops" And item.Contains("mfrmagicalcropscompat") Then
+                Dim hacky As Boolean = raw = "buildcraft" And item.Contains("buildcraftcompat") Or raw = "magicalcrops" And item.Contains("mfrmagicalcropscompat")
+                If hacky Then
                     Exit For
                 End If
 
                 If item.Contains(raw) Then 'Column 4 in the db is the raw name of the mod
-                    'MsgBox("Current mod: " & item)
-
-                    ListBox1.Items.Add(item)
-
                     Dim modVersion As String = Split(item, "-", 2)(1)
 
                     If modVersion <> ds.Rows(j)(3) & ".jar" Then 'Compare the version
@@ -89,6 +115,10 @@ Public Class Main
         adp.Dispose()
         ds.Dispose()
     End Function
+
+    Private Sub DownloadFile(ByVal url As String, ByVal modname As String)
+
+    End Sub
 
     Private Function NewRecord(ByVal modname As String, ByVal version As String, ByVal filename As String, ByVal download_url As String, ByVal website_url As String)
         Dim cmdInsert As New MySqlCommand
