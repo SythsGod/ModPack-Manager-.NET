@@ -1,0 +1,10 @@
+C:\Users\Sachimi\Documents\Visual Studio 2013\Projects\ModpackManager\ModpackManager\bin\Debug\ModpackManager.exe.config
+C:\Users\Sachimi\Documents\Visual Studio 2013\Projects\ModpackManager\ModpackManager\bin\Debug\ModpackManager.exe
+C:\Users\Sachimi\Documents\Visual Studio 2013\Projects\ModpackManager\ModpackManager\bin\Debug\ModpackManager.pdb
+C:\Users\Sachimi\Documents\Visual Studio 2013\Projects\ModpackManager\ModpackManager\bin\Debug\ModpackManager.xml
+C:\Users\Sachimi\Documents\Visual Studio 2013\Projects\ModpackManager\ModpackManager\obj\Debug\ModpackManager.Main.resources
+C:\Users\Sachimi\Documents\Visual Studio 2013\Projects\ModpackManager\ModpackManager\obj\Debug\ModpackManager.Resources.resources
+C:\Users\Sachimi\Documents\Visual Studio 2013\Projects\ModpackManager\ModpackManager\obj\Debug\ModpackManager.vbproj.GenerateResource.Cache
+C:\Users\Sachimi\Documents\Visual Studio 2013\Projects\ModpackManager\ModpackManager\obj\Debug\ModpackManager.exe
+C:\Users\Sachimi\Documents\Visual Studio 2013\Projects\ModpackManager\ModpackManager\obj\Debug\ModpackManager.xml
+C:\Users\Sachimi\Documents\Visual Studio 2013\Projects\ModpackManager\ModpackManager\obj\Debug\ModpackManager.pdb

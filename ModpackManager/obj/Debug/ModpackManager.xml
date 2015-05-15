@@ -1,0 +1,40 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+ModpackManager
+</name>
+</assembly>
+<members>
+<member name="P:ModpackManager.My.Resources.Resources.ResourceManager">
+	<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member><member name="P:ModpackManager.My.Resources.Resources.Culture">
+	<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member><member name="P:ModpackManager.My.Resources.Resources.Db">
+	<summary>
+  Looks up a localized string similar to androcx18_Mods.
+</summary>
+</member><member name="P:ModpackManager.My.Resources.Resources.Ip">
+	<summary>
+  Looks up a localized string similar to sythsgod.com.
+</summary>
+</member><member name="P:ModpackManager.My.Resources.Resources.Pass">
+	<summary>
+  Looks up a localized string similar to Sythsgod0911.
+</summary>
+</member><member name="P:ModpackManager.My.Resources.Resources.User">
+	<summary>
+  Looks up a localized string similar to androcx18.
+</summary>
+</member><member name="T:ModpackManager.My.Resources.Resources">
+	<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
+</member>
+</members>
+</doc>
