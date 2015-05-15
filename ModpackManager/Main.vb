@@ -1,6 +1,7 @@
 ﻿Imports MySql.Data.MySqlClient
 Imports System.IO
 Public Class Main
+    Private instanceForm As New Form
     Public Sub New()
         InitializeComponent()
         Me.StartPosition = FormStartPosition.CenterScreen
@@ -8,10 +9,29 @@ Public Class Main
     End Sub
 
     Private Sub CheckForPath()
-        If GetSetting(My.Application.Info.ProductName, "General", "Path") = Nothing Then
-            Dim pathExists As Boolean = Directory.Exists("C:\Users\Public\Documents\MultiMC\instances")
-            If pathExists Then
+        If GetSetting(My.Application.Info.ProductName, "General", "Path") = Nothing Then 'If there's no saved path, look for plausible paths
+            Dim pathExists As Boolean = Directory.Exists("C:\Users\Public\Documents\MultiMC\instances") 'Check if MultiMC is installed under the default directory
+            If pathExists Then 'If it is, then go look for the instance folders present and let the user make a decision
+                Dim allFolderNames As New List(Of String)
+                Dim instanceFolder As New DirectoryInfo("C:\Users\Public\Documents\MultiMC\instances")
+                For Each folder In instanceFolder.GetDirectories
+                    allFolderNames.Add(folder.Name)
+                Next
 
+                CreateForm(allFolderNames)
+                Dim dialogresult As DialogResult = instanceForm.ShowDialog
+                If dialogresult = Windows.Forms.DialogResult.Yes Then
+
+                ElseIf dialogresult = Windows.Forms.DialogResult.OK Then
+                    If New FolderBrowserDialog().ShowDialog = Windows.Forms.DialogResult.OK Then
+
+                    Else
+                        MsgBox("You denied to select a folder, so this application now denies to work.")
+                        SaveSetting(My.Application.Info.ProductName, "Error", "DeniedWorking", 1)
+                    End If
+                ElseIf dialogresult = Windows.Forms.DialogResult.Cancel Then
+                    Environment.Exit(1)
+                End If
             End If
 
             Dim msg As String = "There was no saved path found yet, please select the path to the following folder: /MultiMC/<instance name>/minecraft/mods"
@@ -25,6 +45,34 @@ Public Class Main
                 CheckForPath()
             End If
         End If
+    End Sub
+
+    Private Sub CreateForm(ByVal folders As List(Of String))
+        instanceForm.FormBorderStyle = Windows.Forms.FormBorderStyle.None
+        instanceForm.Size = New Size(250, 150 + folders.Count * 40)
+
+        Dim lastY As Integer
+
+        Dim lbl As New Label With {.Text = "I found the following instances, " & vbNewLine & "which is used for the Itvara Server?", _
+                                   .Location = New Point(0, 25), .TextAlign = ContentAlignment.MiddleCenter, .Size = New Size(250, 30)}
+
+        For i = 0 To folders.Count - 1
+            Dim btn As New Button
+
+            btn.Size = New Size(150, 35)
+            btn.Location = New Point(50, 80 + 40 * i)
+            btn.Text = folders(i)
+            btn.DialogResult = Windows.Forms.DialogResult.Yes
+
+            lastY = 80 + 40 * i
+
+            instanceForm.Controls.Add(btn)
+        Next
+
+        Dim btnCancel As New Button With {.Text = "Cancel", .Location = New Point(130, lastY + 40), .Size = New Size(70, 35), .DialogResult = Windows.Forms.DialogResult.Cancel}
+        Dim btnCustom As New Button With {.Text = "Custom", .Location = New Point(50, lastY + 40), .Size = New Size(70, 35), .DialogResult = Windows.Forms.DialogResult.OK}
+
+        instanceForm.Controls.AddRange(New Control() {lbl, btnCancel, btnCustom})
     End Sub
 
     Private Sub btnDownload_Click(sender As Object, e As EventArgs) Handles btnDownload.Click
